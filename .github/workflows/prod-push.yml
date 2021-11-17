@@ -14,29 +14,28 @@ jobs:
   Publish:
     runs-on: ubuntu-latest
 
-  steps:
-  - name: Checkout
-    uses: actions/checkout@v2
+    steps:
 
-  - name: Setup .NET Core
-    uses: actions/setup-dotnet@v1
-    with:
-      dotnet-version: 3.1.101
+    - name: Checkout
+      uses: actions/checkout@v2
 
-  - name: Install Depedencies
-    run: dotnet restore
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
 
-  - name: Build
-    run: dotnet build --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
+    - name: Install Depedencies
+      run: dotnet restore
 
-  - name: Run Unit Tests
-    run: dotnet test bleak.Slack.Tests/bleak.Slack.Tests.csproj
+    - name: Build
+      run: dotnet build --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore     
 
-  
-  - name: Publish bleak.Slack
-    uses: rohith/publish-nuget@v2
-    with:
-      PROJECT_FILE_PATH: bleak.Slack/bleak.Slack.csproj
-      NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
-      VERSION_STATIC: ${{ env.VERSION_MAJOR }}.${{ env.VERSION_MINOR }}.${{ env.VERSION_PATCH }}
-    
+    - name: Run Unit Tests
+      run: dotnet test bleak.Slack.Tests/bleak.Slack.Tests.csproj
+
+    - name: Publish bleak.Slack
+      uses: rohith/publish-nuget@v2
+      with:
+        PROJECT_FILE_PATH: bleak.Slack/bleak.Slack.csproj
+        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+        VERSION_STATIC: ${{ env.VERSION_MAJOR }}.${{ env.VERSION_MINOR }}.${{ env.VERSION_PATCH }}
